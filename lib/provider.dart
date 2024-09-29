@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/models/item_name.dart';
-import 'package:q10order/workers/usagi/item_name.dart';
 
 import 'models/order_model.dart';
 import 'models/update_model.dart';

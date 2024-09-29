@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/pages/setting/models/config_model.dart';
 import 'package:q10order/pages/setting/models/seller_authorization_key_model.dart';
@@ -53,15 +52,15 @@ class LeftBody extends HookConsumerWidget {
   const LeftBody({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    const storage = FlutterSecureStorage();
+  Widget build(BuildContext context, WidgetRef ref) {
     // final sak = useState('');
     // final sak_limit = useState('');
     final sakState = ref.watch(sellerAuthKey);
     final Future<ConfigModel> _readStorage = Future.sync(() async {
       // sak.value = await storage.read(key: 'sak') ?? '';
       // sak_limit.value = await storage.read(key: 'sak_limit') ?? '';
-      ref.read(sellerAuthKey.notifier).state = await SellerAuthorizationKey().get();
+      ref.read(sellerAuthKey.notifier).state =
+          await SellerAuthorizationKey().get();
       // ConfigModel config = ConfigModel();
       return ConfigModel().get();
       // return {
@@ -116,7 +115,7 @@ class LeftBody extends HookConsumerWidget {
             userPwd.text = snap.userPwd;
           }
         }
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -160,10 +159,14 @@ class LeftBody extends HookConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               child: FilledButton(
                   onPressed: () async {
-                    ConfigModel model = ConfigModel(useAgent: useAgent.text, apiKey: apiKey.text, userId: userId.text, userPwd: userPwd.text);
+                    ConfigModel model = ConfigModel(
+                        useAgent: useAgent.text,
+                        apiKey: apiKey.text,
+                        userId: userId.text,
+                        userPwd: userPwd.text);
                     bool writeResult = await model.set();
-                    String writeResultText="保存に失敗しました";
-                    if(writeResult){
+                    String writeResultText = "保存に失敗しました";
+                    if (writeResult) {
                       writeResultText = "保存しました";
                     }
                     // await storage.write(key: 'useAgent', value: useAgent.text);
@@ -175,14 +178,15 @@ class LeftBody extends HookConsumerWidget {
                         content: Text(writeResultText),
                       ),
                     );
-                    SellerAuthorizationKey? sak = await certificationAPI(configModel: model);
+                    SellerAuthorizationKey? sak =
+                        await certificationAPI(configModel: model);
                     // sak.value = await storage.read(key: 'sak') ?? '';
                     // sak_limit.value =
                     //     await storage.read(key: 'sak_limit') ?? '';
-                    if(sak != null){
+                    if (sak != null) {
                       ref.read(sellerAuthKey.notifier).state = sak;
-                      sakVal.value=sak.value;
-                      sakLimit.value=sak.limit;
+                      sakVal.value = sak.value;
+                      sakLimit.value = sak.limit;
                       try {
                         sak.set();
                       } catch (e) {

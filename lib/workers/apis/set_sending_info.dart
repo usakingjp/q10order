@@ -5,7 +5,6 @@ import 'package:q10order/pages/setting/providers/config_provider.dart';
 
 import '../../models/api_result_model.dart';
 import '../../models/order_model.dart';
-import '../../provider.dart';
 //https://api.qoo10.jp/GMKT.INC.Front.QAPIService/Document/QAPIGuideIndex.aspx
 
 Future<ApiResultModel> setSendingInfo({

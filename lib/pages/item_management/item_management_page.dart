@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/pages/item_management/apis/q10_apis.dart';
 import 'package:q10order/pages/item_management/models/get_all_goods_info_model.dart';
 import 'package:q10order/pages/item_management/models/get_item_detail_model.dart';
-import 'package:q10order/pages/item_management/models/update_goods_model.dart';
 import 'package:q10order/pages/item_management/parts/all_item_edit_button.dart';
 import 'package:q10order/pages/item_management/parts/itemTitleListViewTile.dart';
 import 'package:q10order/pages/item_management/providers.dart';
 import 'package:q10order/pages/setting/providers/config_provider.dart';
-
-import '../../provider.dart';
 
 class ItemManagementPage extends ConsumerWidget {
   const ItemManagementPage({super.key});
@@ -24,7 +20,7 @@ class ItemManagementPage extends ConsumerWidget {
         children: [
           Container(
             width: 200,
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -57,7 +53,7 @@ class ItemManagementPage extends ConsumerWidget {
                         print(element.sellerCode);
                       }
                     },
-                    child: Text('商品データを取得'),
+                    child: const Text('商品データを取得'),
                   ),
                 ),
                 FilledButton(
@@ -74,7 +70,7 @@ class ItemManagementPage extends ConsumerWidget {
                         }
                       }
                     },
-                    child: Text('編集内容を反映'))
+                    child: const Text('編集内容を反映'))
               ],
             ),
           ),
@@ -87,8 +83,8 @@ class ItemManagementPage extends ConsumerWidget {
                   children: [
                     Container(
                       width: 150,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('商品名の一括編集'),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: const Text('商品名の一括編集'),
                     ),
                     Container(
                       width: 200,
@@ -151,7 +147,7 @@ class ItemManagementPage extends ConsumerWidget {
                         ref.read(getItemDetailModels.notifier).state =
                             getItemsCopy;
                       },
-                      icon: Icon(Icons.keyboard_arrow_up_outlined),
+                      icon: const Icon(Icons.keyboard_arrow_up_outlined),
                     ),
                     IconButton(
                       onPressed: () {
@@ -161,7 +157,7 @@ class ItemManagementPage extends ConsumerWidget {
                         ref.read(getItemDetailModels.notifier).state =
                             getItemsCopy;
                       },
-                      icon: Icon(Icons.keyboard_arrow_down_outlined),
+                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
                     ),
                   ],
                 ),

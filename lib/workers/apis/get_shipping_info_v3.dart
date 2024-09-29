@@ -1,11 +1,9 @@
 import 'dart:convert' as convert;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:q10order/pages/setting/providers/config_provider.dart';
 
-import '../../provider.dart';
 //https://api.qoo10.jp/GMKT.INC.Front.QAPIService/Document/QAPIGuideIndex.aspx
 
 Future<Map<String, dynamic>> getShippingInfoV3({

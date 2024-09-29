@@ -1,5 +1,3 @@
-import 'package:characters/characters.dart';
-
 void adrspl(String text) {
   text = text.codeUnits
       .map((codeUnit) {

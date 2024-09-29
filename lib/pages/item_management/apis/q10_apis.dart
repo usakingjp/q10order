@@ -1,8 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import 'package:q10order/pages/item_management/models/update_goods_model.dart';
-
 import '../models/get_all_goods_info_model.dart';
 
 enum ItemStatus {

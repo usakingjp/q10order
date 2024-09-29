@@ -5,7 +5,6 @@ import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:collection/collection.dart';
 import 'package:q10order/provider.dart';
-import 'package:q10order/workers/usagi/item_name.dart';
 
 import '../models/order_model.dart';
 import '../models/oreder_item_model.dart';
