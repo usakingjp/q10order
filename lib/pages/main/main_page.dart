@@ -7,6 +7,8 @@ import 'package:q10order/provider.dart';
 
 import '../../workers/db/itemnames_db.dart' as item_name_db;
 import '../items/items_name.dart';
+import '../setting/models/seller_authorization_key_model.dart';
+import '../setting/providers/config_provider.dart';
 import 'parts/left_navi.dart';
 import 'parts/main_content.dart';
 
@@ -17,12 +19,18 @@ class MainPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<bool> startup() async {
-      const storage = FlutterSecureStorage();
-      ref.read(sakP.notifier).state = await storage.read(key: 'sak') ?? '';
-      List<ItemName> itemnames = await item_name_db.getAll();
-      itemnames.sort((a, b) => b.q10cord.compareTo(a.q10cord));
-      ref.read(itemNames.notifier).set(itemnames);
-      return true;
+      try {
+        // const storage = FlutterSecureStorage();
+        // ref.read(sakP.notifier).state = await storage.read(key: 'sak') ?? '';
+        ref.read(sellerAuthKey.notifier).state = await SellerAuthorizationKey().get();
+        List<ItemName> itemnames = await item_name_db.getAll();
+        itemnames.sort((a, b) => b.q10cord.compareTo(a.q10cord));
+        ref.read(itemNames.notifier).set(itemnames);
+        return true;
+      } catch (e) {
+        print(e);
+        return false;
+      }
     }
 
     return FutureBuilder(

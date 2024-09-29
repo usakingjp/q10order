@@ -181,10 +181,7 @@ class Q10Apis {
         body: map,
       );
       Map<String, dynamic> result = convert.jsonDecode(response.body);
-      return {
-        'ResultCode': result["ResultCode"],
-        'ResultMsg': result["ResultMsg"]
-      };
+      return result;
     } catch (e) {
       print(e.toString());
       return {'ResultCode': 99, 'ResultMsg': 'connect_error'};

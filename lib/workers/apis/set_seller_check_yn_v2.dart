@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:q10order/pages/setting/providers/config_provider.dart';
 
 import '../../models/api_result_model.dart';
 import '../../models/order_model.dart';
@@ -12,7 +13,8 @@ Future<ApiResultModel> setSellerChackYnV2({
   required OrderModel model,
   required WidgetRef ref,
 }) async {
-  String sak = ref.watch(sakP);
+  // String sak = ref.watch(sakP);
+  String sak = ref.watch(sellerAuthKey).value;
   if (sak.isNotEmpty) {
     final Uri endpoint = Uri.https(
         'api.qoo10.jp',

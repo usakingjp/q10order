@@ -42,7 +42,9 @@ class GetItemDetailModel {
     required this.changedDate,
     required this.optionShippingNo1,
     required this.optionShippingNo2,
-  });
+  }) : edited = false;
+
+  bool edited;
 
   /// 登録された商品のQoo10商品コード
   final String itemCode;
@@ -51,7 +53,7 @@ class GetItemDetailModel {
   final String itemStatus;
 
   /// 商品名
-  final String itemTitle;
+  String itemTitle;
 
   /// 広告文
   final String promotionName;
