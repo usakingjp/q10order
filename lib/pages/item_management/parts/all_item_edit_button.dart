@@ -52,6 +52,7 @@ class AllItemEditButton extends ConsumerWidget {
                 var getItemsCopy = [...ref.watch(getItemDetailModels)];
                 if (allItemsEditText.isNotEmpty) {
                   for (var item in getItemsCopy) {
+                    final beforeItemTitle = item.itemTitle;
                     switch (type.val) {
                       case 0:
                         item.itemTitle = '$allItemsEditText${item.itemTitle}';
@@ -66,10 +67,13 @@ class AllItemEditButton extends ConsumerWidget {
                       default:
                         break;
                     }
-
-                    item.edited = true;
+                    if (beforeItemTitle != item.itemTitle) {
+                      item.edited = true;
+                    }
                   }
-                  ref.read(getItemDetailModels.notifier).state = getItemsCopy;
+                  ref.read(getItemDetailModels.notifier).set(getItemsCopy);
+                  ref.read(getItemDetailModelsView.notifier).state =
+                      ref.watch(getItemDetailModels);
                 }
                 ref.read(itemManagementIsWorking.notifier).state = false;
               }

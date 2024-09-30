@@ -26,12 +26,36 @@ class MyApp extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            bottom: TabBar(tabs: [
-              Tab(text: "受注システム"),
-              Tab(
-                text: "商品管理システム",
-              )
-            ]),
+            title: const TabBar(
+              // labelPadding: EdgeInsets.symmetric(vertical: 30),
+              labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontSize: 16),
+              labelColor: Color.fromARGB(255, 111, 67, 192),
+              unselectedLabelColor: Colors.grey,
+              // indicatorColor: Colors.red,
+              dividerColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.tab,
+              // indicator: BoxDecoration(
+              //   color: Colors.purple,
+              //   borderRadius: BorderRadius.only(
+              //       topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+              // ),
+              dividerHeight: 0,
+              tabs: [
+                Tab(
+                  text: "受注システム",
+                ),
+                Tab(
+                  text: "商品管理システム",
+                  // child: Expanded(
+                  //   child: Container(
+                  //     color: Colors.red,
+                  //     child: Text('商品管理システム'),
+                  //   ),
+                  // ),
+                ),
+              ],
+            ),
           ),
           body: TabBarView(
               children: [MainPage(version: "1.1.4"), ItemManagementPage()]),

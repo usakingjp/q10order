@@ -16,8 +16,7 @@ class ItemTitleListViewTile extends HookConsumerWidget {
     final editMode = useState(false);
     final beforeTitle = viewItem.itemTitle;
     void editFinish() {
-      final copy = [...ref.watch(getItemDetailModels)];
-      ref.read(getItemDetailModels.notifier).state = copy;
+      ref.read(getItemDetailModels.notifier).change(viewItem);
       editMode.value = false;
     }
 
@@ -28,7 +27,26 @@ class ItemTitleListViewTile extends HookConsumerWidget {
             Container(
                 width: 150,
                 padding: EdgeInsets.only(left: 10),
-                child: Text(viewItem.sellerCode)),
+                child: TextButton(
+                  child: Text(viewItem.sellerCode),
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    disabledBackgroundColor: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                    padding: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.zero)),
+                    // overlayColor: Colors.yellow,
+                  ),
+                  // statesController:MaterialStateProperty.all<Color>(Colors.teal)
+                )),
+            IconButton(
+              onPressed: () => editMode.value = !editMode.value,
+              icon: (editMode.value)
+                  ? Icon(Icons.edit_note)
+                  : Icon(Icons.edit_note_outlined),
+            ),
             Expanded(
                 child: (editMode.value)
                     ? TextField(
@@ -59,11 +77,6 @@ class ItemTitleListViewTile extends HookConsumerWidget {
                           maxLines: 1,
                         ),
                       )),
-            IconButton(
-                onPressed: () => editMode.value = !editMode.value,
-                icon: (editMode.value)
-                    ? Icon(Icons.edit_note)
-                    : Icon(Icons.edit_note_outlined))
           ],
         ));
   }
