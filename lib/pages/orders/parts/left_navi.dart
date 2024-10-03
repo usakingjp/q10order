@@ -178,128 +178,122 @@ class LeftNavi extends ConsumerWidget {
       }
     } //setSellerCheckFuction
 
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Container(
-        width: 180,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: (working)
-                          ? null
-                          : () async {
-                              workingN.state = true;
-                              await getOrderFunction();
-                              workingN.state = false;
-                            },
-                      child: const Icon(Icons.autorenew_rounded),
-                    ),
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: (working)
+                      ? null
+                      : () async {
+                          workingN.state = true;
+                          await getOrderFunction();
+                          workingN.state = false;
+                        },
+                  child: const Icon(Icons.autorenew_rounded),
                 ),
-                //発送日一括入力ボタン
-                (ref.watch(status) == 0)
-                    // ? const BulkShippingDateBtn()
-                    ? leftOutLinedButton('発送日一括入力', () async {
-                        await bulkShippingDate(context, ref);
-                      })
-                    : Container(),
-                //発送日反映ボタン
-                leftFilledButton('発送日反映', setSellerCheckFuction),
-                //未発送を選択ボタン
-                (ref.watch(status) == 1)
-                    ? leftOutLinedButton('未発送を選択', () {
-                        for (var element in orderModels) {
-                          if (element.statusId != 1) {
-                            continue;
-                          }
-                          if (element.trackingNo.isEmpty) {
-                            element.check = true;
-                            ref.read(orders.notifier).replaceModel(element);
-                          }
-                        }
-                      })
-                    : Container(),
-                //送り状CSV発行ボタン
-                leftFilledButton('送り状CSV発行', () async {
-                  workingN.state = true;
-                  try {
-                    await showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return const CsvOutputDialog();
-                        });
-
-                    for (var element in ref.watch(orders)) {
-                      element.check = false;
-                      ref.read(orders.notifier).replaceModel(element);
-                    }
-                    ref.read(checkers.notifier).state = [];
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                  workingN.state = false;
-                }),
-                //追跡番号インポートボタン
-                leftFilledButton('追跡番号インポート', () async {
-                  workingN.state = true;
-                  //CSV読み込み
-                  for (var model in orderModels) {
-                    if (model.check) {
-                      model.check = false;
-                      ref.read(orders.notifier).replaceModel(model);
-                    }
-                  }
-                  ref.read(checkers.notifier).state = [];
-                  await showDialog(
-                      context: context,
-                      builder: (_) {
-                        return const CsvImportDialog();
-                      });
-                  workingN.state = false;
-                }),
-              ],
+              ),
             ),
-            //発送完了ボタン
-            Column(
-              children: [
-                leftFilledButton('発送完了', setSendingFunction),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SettingPage()));
-                        },
-                        icon: const Icon(Icons.settings)),
-                    IconButton(
-                        onPressed: () {
-                          // sample();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ItemsName()));
-                        },
-                        icon: const Icon(Icons.abc)),
-                  ],
-                ),
-                Text('version : $version'),
-              ],
-            )
+            //発送日一括入力ボタン
+            (ref.watch(status) == 0)
+                // ? const BulkShippingDateBtn()
+                ? leftOutLinedButton('発送日一括入力', () async {
+                    await bulkShippingDate(context, ref);
+                  })
+                : Container(),
+            //発送日反映ボタン
+            leftFilledButton('発送日反映', setSellerCheckFuction),
+            //未発送を選択ボタン
+            (ref.watch(status) == 1)
+                ? leftOutLinedButton('未発送を選択', () {
+                    for (var element in orderModels) {
+                      if (element.statusId != 1) {
+                        continue;
+                      }
+                      if (element.trackingNo.isEmpty) {
+                        element.check = true;
+                        ref.read(orders.notifier).replaceModel(element);
+                      }
+                    }
+                  })
+                : Container(),
+            //送り状CSV発行ボタン
+            leftFilledButton('送り状CSV発行', () async {
+              workingN.state = true;
+              try {
+                await showDialog<void>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return const CsvOutputDialog();
+                    });
+
+                for (var element in ref.watch(orders)) {
+                  element.check = false;
+                  ref.read(orders.notifier).replaceModel(element);
+                }
+                ref.read(checkers.notifier).state = [];
+              } catch (e) {
+                print(e.toString());
+              }
+              workingN.state = false;
+            }),
+            //追跡番号インポートボタン
+            leftFilledButton('追跡番号インポート', () async {
+              workingN.state = true;
+              //CSV読み込み
+              for (var model in orderModels) {
+                if (model.check) {
+                  model.check = false;
+                  ref.read(orders.notifier).replaceModel(model);
+                }
+              }
+              ref.read(checkers.notifier).state = [];
+              await showDialog(
+                  context: context,
+                  builder: (_) {
+                    return const CsvImportDialog();
+                  });
+              workingN.state = false;
+            }),
           ],
         ),
-      ),
+        //発送完了ボタン
+        Column(
+          children: [
+            leftFilledButton('発送完了', setSendingFunction),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SettingPage()));
+                    },
+                    icon: const Icon(Icons.settings)),
+                IconButton(
+                    onPressed: () {
+                      // sample();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ItemsName()));
+                    },
+                    icon: const Icon(Icons.abc)),
+              ],
+            ),
+            Text('version : $version'),
+          ],
+        )
+      ],
     );
   }
 }

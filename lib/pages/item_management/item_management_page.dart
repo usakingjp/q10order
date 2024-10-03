@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:q10order/pages/item_management/parts/left_navi.dart';
+import '../item_management/parts/left_navi.dart';
+import '../templates/main_content_head_container.dart';
 
+import '../templates/main_frame.dart';
 import 'parts/all_item_edit_row.dart';
 import 'parts/item_list_view.dart';
 
@@ -9,6 +11,17 @@ class ItemManagementPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return const MainFrame(
+      leftNavi: LeftNavi(),
+      mainContent: Column(
+        children: [
+          MainContentHeadContainer(child: AllItemEditRow()),
+          Expanded(
+            child: ItemListView(),
+          ),
+        ],
+      ),
+    );
     return Container(
       decoration: const BoxDecoration(
           border: Border(

@@ -7,6 +7,13 @@ class LeftNavi extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        LeftNaviActionButton(type: LeftNaviActionButtonEnum.get),
+        LeftNaviActionButton(type: LeftNaviActionButtonEnum.update),
+      ],
+    );
     return Container(
       width: 200,
       padding: const EdgeInsets.all(15),

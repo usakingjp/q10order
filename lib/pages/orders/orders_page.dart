@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:q10order/models/item_name.dart';
+import 'package:q10order/pages/templates/main_frame.dart';
 import 'package:q10order/provider.dart';
 
 import '../../workers/db/itemnames_db.dart' as item_name_db;
@@ -9,8 +10,8 @@ import '../setting/providers/config_provider.dart';
 import 'parts/left_navi.dart';
 import 'parts/main_content.dart';
 
-class MainPage extends ConsumerWidget {
-  const MainPage({super.key, required this.version});
+class OrdersPage extends ConsumerWidget {
+  const OrdersPage({super.key, required this.version});
   final String version;
 
   @override
@@ -37,6 +38,12 @@ class MainPage extends ConsumerWidget {
           if (snapshot.hasError) {
             print('snapshot.hasError');
           }
+          return MainFrame(
+            leftNavi: LeftNavi(
+              version: version,
+            ),
+            mainContent: const MainContent(),
+          );
           return Container(
             decoration: BoxDecoration(
                 border: Border(

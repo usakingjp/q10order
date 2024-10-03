@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/pages/setting/models/config_model.dart';
 import 'package:q10order/pages/setting/models/seller_authorization_key_model.dart';
-import 'package:q10order/workers/apis/certification_api.dart';
 
+import 'apis/certification_api.dart';
 import 'providers/config_provider.dart';
 
 class SettingPage extends StatelessWidget {

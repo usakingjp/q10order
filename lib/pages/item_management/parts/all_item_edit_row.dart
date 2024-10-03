@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../templates/main_content_head_label.dart';
 import '../providers.dart';
 import 'all_item_edit_button.dart';
 
@@ -13,39 +14,47 @@ class AllItemEditRow extends ConsumerWidget {
     final itemSearchCtrl = TextEditingController();
     final getItems = ref.watch(getItemDetailModels);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              width: 150,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Text('商品検索'),
-            ),
-            Container(
-              width: 200,
-              child: TextField(
-                controller: itemSearchCtrl,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 180,
+                padding: const EdgeInsets.only(right: 10),
+                child: const MainContentHeadLabel('商品検索'),
               ),
-            ),
-            OutlinedButton(
-                onPressed: () {
-                  var selected = ref
-                      .read(getItemDetailModels.notifier)
-                      .select(itemSearchCtrl.text);
-                  ref.read(getItemDetailModelsView.notifier).state = selected;
-                },
-                child: Text('検索'))
-          ],
+              Container(
+                width: 200,
+                padding: const EdgeInsets.only(right: 10),
+                child: TextField(
+                  controller: itemSearchCtrl,
+                ),
+              ),
+              OutlinedButton(
+                  onPressed: () {
+                    var selected = ref
+                        .read(getItemDetailModels.notifier)
+                        .select(itemSearchCtrl.text);
+                    ref.read(getItemDetailModelsView.notifier).state = selected;
+                  },
+                  child: Text('検索'))
+            ],
+          ),
         ),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 150,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Text('商品名の一括編集'),
+              width: 180,
+              padding: const EdgeInsets.only(right: 10),
+              child: const MainContentHeadLabel('商品名の一括編集'),
             ),
             Container(
               width: 200,
+              padding: const EdgeInsets.only(right: 10),
               child: TextField(
                 controller: allItemTitleEditCtrl,
                 onChanged: (v) {
@@ -54,15 +63,15 @@ class AllItemEditRow extends ConsumerWidget {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.only(right: 10),
               child: AllItemEditButton(type: AllItemEditButtonEnum.beforeAdd),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.only(right: 10),
               child: AllItemEditButton(type: AllItemEditButtonEnum.afterAdd),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.only(right: 10),
               child: AllItemEditButton(type: AllItemEditButtonEnum.delete),
             ),
             IconButton(

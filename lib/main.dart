@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'pages/category_page_generator/category_page_generator_page.dart';
 import 'pages/item_management/item_management_page.dart';
-import 'pages/main/main_page.dart';
+import 'pages/orders/orders_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       //   version: '1.1.4',
       // ),
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: const TabBar(
@@ -54,11 +56,17 @@ class MyApp extends StatelessWidget {
                   //   ),
                   // ),
                 ),
+                Tab(
+                  text: "カテゴリーページ生成",
+                ),
               ],
             ),
           ),
-          body: TabBarView(
-              children: [MainPage(version: "1.1.4"), ItemManagementPage()]),
+          body: const TabBarView(children: [
+            OrdersPage(version: "1.1.4"),
+            ItemManagementPage(),
+            CategoryPageGeneratorPage(),
+          ]),
         ),
       ),
     );

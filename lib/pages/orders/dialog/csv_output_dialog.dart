@@ -2,7 +2,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/provider.dart';
-import 'package:q10order/pages/main/dialog/pdf_preview.dart';
+import 'package:q10order/pages/orders/dialog/pdf_preview.dart';
 
 import '../../../models/order_model.dart';
 import '../../../workers/csv/output.dart';
