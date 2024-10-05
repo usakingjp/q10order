@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -72,6 +71,8 @@ Future<List<Map<String, dynamic>>> insertData(
   } catch (e) {
     print(e);
     return [];
+  } finally {
+    await db.close();
   }
 }
 
@@ -89,6 +90,8 @@ Future<List<Map<String, dynamic>>> insertOrReplaceData(
   } catch (e) {
     print(e);
     return [];
+  } finally {
+    await db.close();
   }
 }
 
@@ -103,6 +106,6 @@ Future<List<Map<String, dynamic>>> getData(DataBaseName name) async {
     print(e);
     return [];
   } finally {
-    db.close();
+    await db.close();
   }
 }

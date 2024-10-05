@@ -42,7 +42,7 @@ class CategorySelect extends HookConsumerWidget {
     }
     final categoryId = useState<int?>(thisCategory);
     return Padding(
-      padding: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.only(right: 15),
       child: DropdownButton(
         items: categories
             .map((f) => DropdownMenuItem(

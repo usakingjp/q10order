@@ -11,7 +11,10 @@ class CategorySettingContent extends StatelessWidget {
       children: [
         CategorySettingHead(),
         Expanded(
-          child: CategorySettingListView(),
+          child: Padding(
+            padding: EdgeInsets.all(15.0),
+            child: CategorySettingListView(),
+          ),
         ),
       ],
     );

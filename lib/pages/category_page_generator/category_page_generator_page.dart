@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:q10order/pages/setting/models/config_model.dart';
 import 'package:q10order/pages/templates/main_frame.dart';
 
 import 'db/db.dart';
@@ -24,11 +22,13 @@ class CategoryPageGeneratorPage extends HookConsumerWidget {
               in await getData(DataBaseName.categories))
             CategoryModel.fromMap(map)
         ];
-        ref.read(categoryItems.notifier).state = [
-          for (Map<String, dynamic> map
-              in await getData(DataBaseName.categoryItems))
-            CategoryItemModel.fromMap(queryMap: map)
-        ];
+        if (ref.watch(categoryItems).isEmpty) {
+          ref.read(categoryItems.notifier).state = [
+            for (Map<String, dynamic> map
+                in await getData(DataBaseName.categoryItems))
+              CategoryItemModel.fromMap(queryMap: map)
+          ];
+        }
         return true;
       } catch (e) {
         print(e);
@@ -44,22 +44,26 @@ class CategoryPageGeneratorPage extends HookConsumerWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      tabCtrl.value = 0;
+                      if (!ref.watch(isWorking)) {
+                        tabCtrl.value = 0;
+                      }
                     },
-                    child: Text('カテゴリー管理'),
+                    child: const Text('カテゴリー管理'),
                   ),
                   TextButton(
                     onPressed: () {
-                      tabCtrl.value = 1;
+                      if (!ref.watch(isWorking)) {
+                        tabCtrl.value = 1;
+                      }
                     },
-                    child: Text('カテゴリー設定'),
+                    child: const Text('カテゴリー設定'),
                   ),
                 ],
               ),
               mainContent: (tabCtrl.value == 0)
-                  ? CategoryManagementContent()
+                  ? const CategoryManagementContent()
                   : (tabCtrl.value == 1)
-                      ? CategorySettingContent()
+                      ? const CategorySettingContent()
                       : Container());
         });
   }

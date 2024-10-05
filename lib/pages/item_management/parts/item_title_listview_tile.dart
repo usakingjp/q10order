@@ -22,30 +22,31 @@ class ItemTitleListViewTile extends HookConsumerWidget {
 
     return Container(
         height: 40,
+        padding: const EdgeInsets.only(right: 10),
         child: Row(
           children: [
             Container(
                 width: 150,
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: TextButton(
-                  child: Text(viewItem.sellerCode),
                   onPressed: () {},
                   style: TextButton.styleFrom(
                     disabledBackgroundColor: Colors.transparent,
                     backgroundColor: Colors.transparent,
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.zero)),
                     // overlayColor: Colors.yellow,
                   ),
+                  child: Text(viewItem.sellerCode),
                   // statesController:MaterialStateProperty.all<Color>(Colors.teal)
                 )),
             IconButton(
               onPressed: () => editMode.value = !editMode.value,
               icon: (editMode.value)
-                  ? Icon(Icons.edit_note)
-                  : Icon(Icons.edit_note_outlined),
+                  ? const Icon(Icons.edit_note)
+                  : const Icon(Icons.edit_note_outlined),
             ),
             Expanded(
                 child: (editMode.value)

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../consts/colors.dart';
 import '../../templates/main_content_head_container.dart';
 import '../../templates/main_content_head_label.dart';
 import '../db/db.dart';
@@ -13,20 +12,14 @@ class CategoryManagementContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final categoriesMock = useState<List<CategoryModel>>([
-    //   CategoryModel(id: 0, name: "hoge", parentId: null),
-    //   CategoryModel(id: 1, name: "hoge1", parentId: null),
-    //   CategoryModel(id: 2, name: "hoge2", parentId: 1),
-    //   CategoryModel(id: 3, name: "hoge3", parentId: 0)
-    // ]);
     final newCategoryCtrl = useTextEditingController();
     return Column(children: [
       MainContentHeadContainer(
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
+            const Padding(
+              padding: EdgeInsets.only(right: 15),
               child: MainContentHeadLabel('新しいカテゴリー：'),
             ),
             Container(
@@ -52,7 +45,7 @@ class CategoryManagementContent extends HookConsumerWidget {
                       newCategoryCtrl.text = "";
                       ref.read(isWorking.notifier).state = false;
                     },
-              child: Text('追加'),
+              child: const Text('追加'),
             ),
           ],
         ),

@@ -33,10 +33,18 @@ class CategorySettingHead extends HookConsumerWidget {
                   Map<String, dynamic> allGoods = await apis.getAllGoodsInfo();
                   print(allGoods["Items"].length);
                   List<Map<String, dynamic>> itemDetails = [
-                    for (var goods
-                        in allGoods["Items"] as List<GetAllGoodsInfoModel>)
-                      await apis.getItemDetaiInfo(itemCode: goods.itemCode)
+                    // for (var goods
+                    //     in allGoods["Items"] as List<GetAllGoodsInfoModel>)
+                    //   await apis.getItemDetaiInfo(itemCode: goods.itemCode)
                   ];
+                  int count = 0;
+                  for (var goods
+                      in allGoods["Items"] as List<GetAllGoodsInfoModel>) {
+                    itemDetails.add(
+                        await apis.getItemDetaiInfo(itemCode: goods.itemCode));
+                    count += 1;
+                    if (count > 30) break;
+                  }
                   ref.read(categoryItems.notifier).state = [
                     for (var item in itemDetails)
                       CategoryItemModel.fromMap(apiResponse: item)
