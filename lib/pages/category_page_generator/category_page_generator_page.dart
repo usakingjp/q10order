@@ -7,6 +7,7 @@ import 'db/db.dart';
 import 'models/category_item_model.dart';
 import 'models/category_model.dart';
 import 'parts/category_management_content.dart';
+import 'parts/category_page_content.dart';
 import 'parts/category_setting_content.dart';
 import 'providers/providers.dart';
 
@@ -36,35 +37,69 @@ class CategoryPageGeneratorPage extends HookConsumerWidget {
       }
     });
     final tabCtrl = useState(0);
+    Widget mainContentView(int id) {
+      switch (id) {
+        case 0:
+          return const CategoryManagementContent();
+        case 1:
+          return const CategorySettingContent();
+        case 2:
+          return const CategoryPageContent();
+        default:
+          return Container();
+      }
+    }
+
+    List<Map<String, dynamic>> tabs = [
+      {'key': 0, 'value': 'カテゴリー管理'},
+      {'key': 1, 'value': 'カテゴリー設定'},
+      {'key': 2, 'value': 'ページ設計'},
+    ];
+
     return FutureBuilder(
         future: _future,
         builder: (context, snapshot) {
           return MainFrame(
-              leftNavi: Column(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      if (!ref.watch(isWorking)) {
-                        tabCtrl.value = 0;
-                      }
-                    },
-                    child: const Text('カテゴリー管理'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (!ref.watch(isWorking)) {
-                        tabCtrl.value = 1;
-                      }
-                    },
-                    child: const Text('カテゴリー設定'),
-                  ),
-                ],
-              ),
-              mainContent: (tabCtrl.value == 0)
-                  ? const CategoryManagementContent()
-                  : (tabCtrl.value == 1)
-                      ? const CategorySettingContent()
-                      : Container());
+            leftNavi: Column(
+                children: tabs.map((e) {
+              return TextButton(
+                onPressed: () {
+                  if (!ref.watch(isWorking)) {
+                    tabCtrl.value = e['key'];
+                  }
+                },
+                child: Text(e['value']),
+              );
+            }).toList()
+                // [
+                //   TextButton(
+                //     onPressed: () {
+                //       if (!ref.watch(isWorking)) {
+                //         tabCtrl.value = 0;
+                //       }
+                //     },
+                //     child: const Text('カテゴリー管理'),
+                //   ),
+                //   TextButton(
+                //     onPressed: () {
+                //       if (!ref.watch(isWorking)) {
+                //         tabCtrl.value = 1;
+                //       }
+                //     },
+                //     child: const Text('カテゴリー設定'),
+                //   ),
+                //   TextButton(
+                //     onPressed: () {
+                //       if (!ref.watch(isWorking)) {
+                //         tabCtrl.value = 2;
+                //       }
+                //     },
+                //     child: const Text('ページ設計'),
+                //   ),
+                // ],
+                ),
+            mainContent: mainContentView(tabCtrl.value),
+          );
         });
   }
 }

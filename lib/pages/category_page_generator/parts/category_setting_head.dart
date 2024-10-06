@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:q10order/pages/category_page_generator/db/db.dart';
 
 import '../../item_management/models/get_all_goods_info_model.dart';
 import '../../setting/providers/config_provider.dart';
@@ -67,7 +68,19 @@ class CategorySettingHead extends HookConsumerWidget {
                   child: Icon(Icons.cached_rounded)),
         ),
         FilledButton(
-          onPressed: (ref.watch(isWorking)) ? () {} : () {},
+          onPressed: (ref.watch(isWorking))
+              ? () {}
+              : () async {
+                  List<Map<String, dynamic>> results = [];
+                  for (var element in ref.watch(categoryItems)) {
+                    results = await insertOrReplaceData(
+                        DataBaseName.categoryItems, element.toMap());
+                  }
+                  ref.read(categoryItems.notifier).state = [
+                    for (var map in results)
+                      CategoryItemModel.fromMap(queryMap: map)
+                  ];
+                },
           child: const Text('一括更新'),
         ),
       ],
