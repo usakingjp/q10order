@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q10order/pages/templates/main_frame.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db/db.dart';
 import 'models/category_item_model.dart';
 import 'models/category_model.dart';
+import 'models/page_setting_model.dart';
 import 'parts/category_management_content.dart';
 import 'parts/category_page_content.dart';
 import 'parts/category_setting_content.dart';
@@ -30,6 +32,20 @@ class CategoryPageGeneratorPage extends HookConsumerWidget {
               CategoryItemModel.fromMap(queryMap: map)
           ];
         }
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        ref.read(pageSetting.notifier).state = PageSettingModel(
+          listOrTile: prefs.getInt('listOrTile') ?? 0,
+          rowQty: prefs.getInt('rowQty') ?? 3,
+          accentColor: prefs.getInt('accentColor') ?? 4284955319,
+          subColor: prefs.getInt('subColor') ?? 4286336511,
+          titleLength: prefs.getString('titleLength') ?? '20',
+          exclusions: prefs.getStringList('exclusions') ?? [],
+          dispTitle: prefs.getBool('dispTitle') ?? true,
+          dispImage: prefs.getBool('dispImage') ?? true,
+          dispPrice: prefs.getBool('dispPrice') ?? true,
+          dispPoint: prefs.getBool('dispPoint') ?? true,
+          sampleWidth: prefs.getString('sampleWidth') ?? '700',
+        );
         return true;
       } catch (e) {
         print(e);

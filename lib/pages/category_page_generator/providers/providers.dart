@@ -8,4 +8,4 @@ final categories = StateProvider<List<CategoryModel>>((ref) => []);
 final categoryItems = StateProvider<List<CategoryItemModel>>((ref) => []);
 final isWorking = StateProvider<bool>((ref) => false);
 final pageSetting =
-    StateProvider<PageSettingModel>((ref) => PageSettingModel(listOrTile: 0));
+    StateProvider<PageSettingModel>((ref) => PageSettingModel());
