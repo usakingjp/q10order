@@ -32,7 +32,7 @@ class CategoryPageGeneratorPage extends ConsumerWidget {
           dispTitle: prefs.getBool('dispTitle') ?? true,
           dispImage: prefs.getBool('dispImage') ?? true,
           dispPrice: prefs.getBool('dispPrice') ?? true,
-          dispPoint: prefs.getBool('dispPoint') ?? true,
+          dispPromotion: prefs.getBool('dispPromotion') ?? true,
           sampleWidth: prefs.getString('sampleWidth') ?? '700',
         );
         return true;

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:q10order/consts/colors.dart';
 import '../../templates/main_content_head_container.dart';
 import '../../templates/main_content_head_label.dart';
 import '../models/category_model.dart';
 import '../providers/providers.dart';
+import 'category_management/listview_label.dart';
+import 'category_management/listview_tile.dart';
 
 class CategoryManagementContent extends HookConsumerWidget {
   const CategoryManagementContent({super.key});
@@ -27,6 +30,14 @@ class CategoryManagementContent extends HookConsumerWidget {
               child: TextField(
                 controller: newCategoryCtrl,
                 // expands: true,
+                onSubmitted: (v) async {
+                  ref.read(isWorking.notifier).state = true;
+                  await ref
+                      .read(categories.notifier)
+                      .add(CategoryModel(name: newCategoryCtrl.text));
+                  newCategoryCtrl.text = "";
+                  ref.read(isWorking.notifier).state = false;
+                },
               ),
             ),
             FilledButton(
@@ -53,12 +64,15 @@ class CategoryManagementContent extends HookConsumerWidget {
         ),
       ),
       Expanded(
-        child: ListView.builder(
-            itemCount: ref.watch(categories).length,
-            itemBuilder: (c, i) {
-              var model = ref.watch(categories)[i];
-              return Text('id:${model.id}, name:${model.name}');
-            }),
+        child: Container(
+          margin: EdgeInsets.only(top: 15),
+          child: ListView.builder(
+              itemCount: ref.watch(categories).length,
+              itemBuilder: (c, i) {
+                var model = ref.watch(categories)[i];
+                return ListviewTile(model: model);
+              }),
+        ),
       )
     ]);
   }

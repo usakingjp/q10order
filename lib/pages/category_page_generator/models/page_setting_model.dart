@@ -9,7 +9,7 @@ class PageSettingModel {
   bool dispTitle;
   bool dispImage;
   bool dispPrice;
-  bool dispPoint;
+  bool dispPromotion;
   String sampleWidth;
   PageSettingModel({
     this.id,
@@ -22,7 +22,7 @@ class PageSettingModel {
     this.dispTitle = true,
     this.dispImage = true,
     this.dispPrice = true,
-    this.dispPoint = true,
+    this.dispPromotion = true,
     this.sampleWidth = '700',
   });
 }

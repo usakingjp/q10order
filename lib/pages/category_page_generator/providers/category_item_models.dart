@@ -46,4 +46,60 @@ class CategoryItemModels extends StateNotifier<List<CategoryItemModel>> {
     debugPrint(results.length.toString());
     state = [for (var map in results) CategoryItemModel.fromMap(queryMap: map)];
   }
+
+  Future<void> categoryDelete(int categoryId) async {
+    final searched = state.where((e) => [
+          e.categoryId1,
+          e.categoryId2,
+          e.categoryId3,
+          e.categoryId4,
+          e.categoryId5,
+          e.categoryId6
+        ].contains(categoryId));
+    for (var model in searched) {
+      List<int?> categoryIds = [
+        model.categoryId1,
+        model.categoryId2,
+        model.categoryId3,
+        model.categoryId4,
+        model.categoryId5,
+        model.categoryId6
+      ];
+      categoryIds.remove(categoryId);
+      categoryIds.whereType<int>().toList();
+      model.categoryId1 = null;
+      model.categoryId2 = null;
+      model.categoryId3 = null;
+      model.categoryId4 = null;
+      model.categoryId5 = null;
+      model.categoryId6 = null;
+      for (var i = 0; i < categoryIds.length; i++) {
+        switch (i) {
+          case 0:
+            model.categoryId1 = categoryIds[i];
+            break;
+          case 1:
+            model.categoryId2 = categoryIds[i];
+            break;
+          case 2:
+            model.categoryId3 = categoryIds[i];
+            break;
+          case 3:
+            model.categoryId4 = categoryIds[i];
+            break;
+          case 4:
+            model.categoryId5 = categoryIds[i];
+            break;
+          case 5:
+            model.categoryId6 = categoryIds[i];
+            break;
+          default:
+            break;
+        }
+      }
+      await updateData(DataBaseName.categoryItems, model.toMap(),
+          where: 'itemCode=?', whereArgs: [model.itemCode]);
+    }
+    state = [...state];
+  }
 }

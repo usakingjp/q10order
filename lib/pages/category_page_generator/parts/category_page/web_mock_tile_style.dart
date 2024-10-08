@@ -5,7 +5,7 @@ class WebMockTileStyle extends StatelessWidget {
       {super.key,
       required this.dispImage,
       required this.dispTitle,
-      required this.dispPoint,
+      required this.dispPromotion,
       required this.dispPrice,
       required this.rowQty,
       required this.accentColor,
@@ -15,7 +15,7 @@ class WebMockTileStyle extends StatelessWidget {
 
   final ValueNotifier<bool> dispImage;
   final ValueNotifier<bool> dispTitle;
-  final ValueNotifier<bool> dispPoint;
+  final ValueNotifier<bool> dispPromotion;
   final ValueNotifier<bool> dispPrice;
   final ValueNotifier<int> rowQty;
   final ValueNotifier<Color> accentColor;
@@ -65,12 +65,11 @@ class WebMockTileStyle extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                (dispPoint.value)
-                    ? Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                        color: accentColor.value,
-                        child: Text('point'))
+                (dispPromotion.value)
+                    ? Text(
+                        'promotionpromotion',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      )
                     : Container(),
                 (dispPrice.value)
                     ? Row(
@@ -81,7 +80,9 @@ class WebMockTileStyle extends StatelessWidget {
                               child: Text(
                                 '￥99,999',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: accentColor.value),
                               )),
                         ],
                       )

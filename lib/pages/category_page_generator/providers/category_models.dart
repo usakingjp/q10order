@@ -27,7 +27,16 @@ class CategoryModels extends StateNotifier<List<CategoryModel>> {
   }
 
   Future<void> replace(CategoryModel model) async {
-    await updateData(DataBaseName.categories, model.toMap());
+    await updateData(DataBaseName.categories, model.toMap(),
+        where: 'id=?', whereArgs: [model.id]);
     state = [for (final s in state) (s.id == model.id) ? model : s];
+  }
+
+  Future<void> delete(CategoryModel model) async {
+    await deleteData(DataBaseName.categories, where: 'id', args: [model.id!]);
+    state = [
+      for (final s in state)
+        if (s.id != model.id) s
+    ];
   }
 }

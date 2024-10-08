@@ -27,13 +27,14 @@ Future<Database> database() async {
   //     'ALTER TABLE configs ADD COLUMN itemcsvName INTEGER;',
   //   ],
   // };
+  debugPrint(join(path.path, 'category.db'));
   return await openDatabase(
     join(path.path, 'category.db'),
     // 'category.db',
     // inMemoryDatabasePath,
     onCreate: (db, version) async {
       await db.execute(
-        "CREATE TABLE if not exists categories(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, parentId INTEGER NULLABLE)",
+        "CREATE TABLE if not exists categories(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, parentId INTEGER NULLABLE, headerImageUrl TEXT)",
       );
       await db.execute(
         "CREATE TABLE if not exists category_items (itemCode TEXT PRIMARY KEY,sellerCode TEXT, brandName TEXT NULLABLE, itemTitle TEXT, categoryId1 INTEGER NULLABLE, categoryId2 INTEGER NULLABLE, categoryId3 INTEGER NULLABLE, categoryId4 INTEGER NULLABLE, categoryId5 INTEGER NULLABLE, categoryId6 INTEGER NULLABLE)",
@@ -110,12 +111,30 @@ Future<List<Map<String, dynamic>>> getData(DataBaseName name) async {
   }
 }
 
-Future<void> updateData(DataBaseName name, Map<String, dynamic> map) async {
+Future<void> updateData(DataBaseName name, Map<String, dynamic> map,
+    {String? where, List<Object?>? whereArgs}) async {
   final Database db = await database();
   try {
-    await db.update(name.name, map);
+    await db.update(name.name, map, where: where, whereArgs: whereArgs);
   } catch (e) {
     debugPrint(e.toString());
+  } finally {
+    await db.close();
+  }
+}
+
+Future<int> deleteData(
+  DataBaseName name, {
+  required String where,
+  required List<Object> args,
+}) async {
+  final Database db = await database();
+  try {
+    int result = await db.delete(name.name, where: '$where=?', whereArgs: args);
+    return result;
+  } catch (e) {
+    debugPrint(e.toString());
+    return 0;
   } finally {
     await db.close();
   }

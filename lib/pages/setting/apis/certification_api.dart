@@ -32,7 +32,7 @@ Future<SellerAuthorizationKey?> certificationAPI(
         return sak;
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return null;
     } finally {
       client.close();

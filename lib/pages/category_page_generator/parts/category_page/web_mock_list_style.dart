@@ -5,7 +5,7 @@ class WebMockListStyle extends StatelessWidget {
       {super.key,
       required this.dispImage,
       required this.dispTitle,
-      required this.dispPoint,
+      required this.dispPromotion,
       required this.dispPrice,
       required this.accentColor,
       required this.subColor,
@@ -14,7 +14,7 @@ class WebMockListStyle extends StatelessWidget {
 
   final ValueNotifier<bool> dispImage;
   final ValueNotifier<bool> dispTitle;
-  final ValueNotifier<bool> dispPoint;
+  final ValueNotifier<bool> dispPromotion;
   final ValueNotifier<bool> dispPrice;
   final ValueNotifier<Color> accentColor;
   final ValueNotifier<Color> subColor;
@@ -47,35 +47,38 @@ class WebMockListStyle extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // mainAxisSize: MainAxisSize.max,
                 children: [
-                  (dispTitle.value)
-                      ? Container(
-                          width:
-                              sampleWidth.value - (sampleWidth.value / 6 + 40),
-                          child: Text([
-                            for (int i = 0; i < titleLength.value; i++) 'Ｓ'
-                          ].join('')),
-                        )
-                      : Container(),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      (dispPoint.value)
+                      (dispTitle.value)
                           ? Container(
-                              padding: EdgeInsets.all(5),
-                              margin: EdgeInsets.only(right: 15),
-                              color: accentColor.value,
-                              child: Text('point'))
+                              width: sampleWidth.value -
+                                  (sampleWidth.value / 6 + 40),
+                              child: Text([
+                                for (int i = 0; i < titleLength.value; i++) 'Ｓ'
+                              ].join('')),
+                            )
                           : Container(),
-                      (dispPrice.value)
-                          ? Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                '￥99,999',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ))
+                      (dispPromotion.value)
+                          ? Text(
+                              'promotionpromotion',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.grey),
+                            )
                           : Container(),
                     ],
                   ),
+                  (dispPrice.value)
+                      ? Container(
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            '￥99,999',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: accentColor.value),
+                          ))
+                      : Container(),
                 ],
               ),
             )

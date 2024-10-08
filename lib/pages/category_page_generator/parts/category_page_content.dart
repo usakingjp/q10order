@@ -37,7 +37,7 @@ class CategoryPageContent extends HookConsumerWidget {
     final dispTitle = useState(psModel.dispTitle);
     final dispImage = useState(psModel.dispImage);
     final dispPrice = useState(psModel.dispPrice);
-    final dispPoint = useState(psModel.dispPoint);
+    final dispPromotion = useState(psModel.dispPromotion);
     final sampleWidthText = useTextEditingController(text: psModel.sampleWidth);
     final sampleWidth = useState(int.tryParse(psModel.sampleWidth) ?? 700);
     // final disp = useState(false);
@@ -271,6 +271,11 @@ class CategoryPageContent extends HookConsumerWidget {
                   val: dispTitle,
                 ),
                 OriginalCheckBox(
+                  label: '広告文',
+                  prefLabel: 'dispPromotion',
+                  val: dispPromotion,
+                ),
+                OriginalCheckBox(
                   label: '画像',
                   prefLabel: 'dispImage',
                   val: dispImage,
@@ -279,11 +284,6 @@ class CategoryPageContent extends HookConsumerWidget {
                   label: '価格',
                   prefLabel: 'dispPrice',
                   val: dispPrice,
-                ),
-                OriginalCheckBox(
-                  label: 'ポイント',
-                  prefLabel: 'dispPoint',
-                  val: dispPoint,
                 ),
               ],
             ),
@@ -318,7 +318,7 @@ class CategoryPageContent extends HookConsumerWidget {
                       WebMockListStyle(
                           dispImage: dispImage,
                           dispTitle: dispTitle,
-                          dispPoint: dispPoint,
+                          dispPromotion: dispPromotion,
                           dispPrice: dispPrice,
                           accentColor: accentColor,
                           subColor: subColor,
@@ -332,7 +332,7 @@ class CategoryPageContent extends HookConsumerWidget {
                       WebMockTileStyle(
                           dispImage: dispImage,
                           dispTitle: dispTitle,
-                          dispPoint: dispPoint,
+                          dispPromotion: dispPromotion,
                           dispPrice: dispPrice,
                           rowQty: rowQty,
                           accentColor: accentColor,
