@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../consts/colors.dart';
-import '../providers/providers.dart';
+import '../../../../consts/colors.dart';
+import '../../providers/providers.dart';
 import 'category_select.dart';
+import 'functions.dart';
 
 class CategorySettingListView extends ConsumerWidget {
   const CategorySettingListView({super.key});
@@ -65,9 +66,11 @@ class CategorySettingListView extends ConsumerWidget {
                     ),
                   ),
                   TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         print(
                             '${model.categoryId1},${model.categoryId2},${model.categoryId3},${model.categoryId4},${model.categoryId5},');
+                        model = categoryIdsOrganize(model);
+                        ref.read(categoryItems.notifier).replace(model);
                       },
                       child: const Text('更新'))
                 ],

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:q10order/pages/category_page_generator/db/db.dart';
 
-import '../../item_management/models/get_all_goods_info_model.dart';
-import '../../setting/providers/config_provider.dart';
-import '../apis/q10_apis.dart';
-import '../models/category_item_model.dart';
-import '../providers/providers.dart';
+import '../../../item_management/models/get_all_goods_info_model.dart';
+import '../../../setting/providers/config_provider.dart';
+import '../../apis/q10_apis.dart';
+import '../../models/category_item_model.dart';
+import '../../providers/providers.dart';
+import 'functions.dart';
 
 class CategorySettingHead extends HookConsumerWidget {
   const CategorySettingHead({super.key});
@@ -32,7 +32,7 @@ class CategorySettingHead extends HookConsumerWidget {
                   Q10Apis apis = Q10Apis(
                       sellerAuthorizationKey: ref.watch(sellerAuthKey).value);
                   Map<String, dynamic> allGoods = await apis.getAllGoodsInfo();
-                  print(allGoods["Items"].length);
+                  debugPrint(allGoods["Items"].length.toString());
                   List<Map<String, dynamic>> itemDetails = [
                     // for (var goods
                     //     in allGoods["Items"] as List<GetAllGoodsInfoModel>)
@@ -46,10 +46,14 @@ class CategorySettingHead extends HookConsumerWidget {
                     count += 1;
                     if (count > 30) break;
                   }
-                  ref.read(categoryItems.notifier).state = [
+                  ref.read(categoryItems.notifier).set([
                     for (var item in itemDetails)
                       CategoryItemModel.fromMap(apiResponse: item)
-                  ];
+                  ]);
+                  // ref.read(categoryItems.notifier).state = [
+                  //   for (var item in itemDetails)
+                  //     CategoryItemModel.fromMap(apiResponse: item)
+                  // ];
                   ref.read(isWorking.notifier).state = false;
                 },
           child: (ref.watch(isWorking))
@@ -71,15 +75,19 @@ class CategorySettingHead extends HookConsumerWidget {
           onPressed: (ref.watch(isWorking))
               ? () {}
               : () async {
-                  List<Map<String, dynamic>> results = [];
                   for (var element in ref.watch(categoryItems)) {
-                    results = await insertOrReplaceData(
-                        DataBaseName.categoryItems, element.toMap());
+                    element = categoryIdsOrganize(element);
                   }
-                  ref.read(categoryItems.notifier).state = [
-                    for (var map in results)
-                      CategoryItemModel.fromMap(queryMap: map)
-                  ];
+                  await ref.read(categoryItems.notifier).allEdit();
+                  // List<Map<String, dynamic>> results = [];
+                  // for (var element in ref.watch(categoryItems)) {
+                  //   results = await insertOrReplaceData(
+                  //       DataBaseName.categoryItems, element.toMap());
+                  // }
+                  // ref.read(categoryItems.notifier).state = [
+                  //   for (var map in results)
+                  //     CategoryItemModel.fromMap(queryMap: map)
+                  // ];
                 },
           child: const Text('一括更新'),
         ),

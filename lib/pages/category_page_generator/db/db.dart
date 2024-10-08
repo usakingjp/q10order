@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -26,7 +27,6 @@ Future<Database> database() async {
   //     'ALTER TABLE configs ADD COLUMN itemcsvName INTEGER;',
   //   ],
   // };
-  // print(join(path.path, 'category.db'));
   return await openDatabase(
     join(path.path, 'category.db'),
     // 'category.db',
@@ -69,7 +69,7 @@ Future<List<Map<String, dynamic>>> insertData(
     final List<Map<String, dynamic>> result = await getData(name);
     return result;
   } catch (e) {
-    print(e);
+    debugPrint(e.toString());
     return [];
   } finally {
     await db.close();
@@ -88,7 +88,7 @@ Future<List<Map<String, dynamic>>> insertOrReplaceData(
     final List<Map<String, dynamic>> result = await getData(name);
     return result;
   } catch (e) {
-    print(e);
+    debugPrint(e.toString());
     return [];
   } finally {
     await db.close();
@@ -103,8 +103,19 @@ Future<List<Map<String, dynamic>>> getData(DataBaseName name) async {
     );
     return result;
   } catch (e) {
-    print(e);
+    debugPrint(e.toString());
     return [];
+  } finally {
+    await db.close();
+  }
+}
+
+Future<void> updateData(DataBaseName name, Map<String, dynamic> map) async {
+  final Database db = await database();
+  try {
+    await db.update(name.name, map);
+  } catch (e) {
+    debugPrint(e.toString());
   } finally {
     await db.close();
   }

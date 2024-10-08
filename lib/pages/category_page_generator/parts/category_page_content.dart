@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:q10order/pages/category_page_generator/providers/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../providers/providers.dart';
 import 'category_page/original_check_box.dart';
 import 'category_page/setting_row.dart';
 import 'category_page/web_mock_list_style.dart';
@@ -50,7 +49,9 @@ class CategoryPageContent extends HookConsumerWidget {
           SettingRow(
             label: '表示形式',
             widget: OutlinedButton(
-              child: (listOrTile.value == 0) ? Text('リスト') : Text('タイル'),
+              child: (listOrTile.value == 0)
+                  ? const Text('リスト')
+                  : const Text('タイル'),
               onPressed: () async {
                 if (listOrTile.value == 0) {
                   listOrTile.value = 1;
@@ -70,11 +71,11 @@ class CategoryPageContent extends HookConsumerWidget {
                 : DropdownButton(
                     items: [3, 4, 5, 6].map((e) {
                       return DropdownMenuItem(
+                        value: e,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(e.toString()),
                         ),
-                        value: e,
                       );
                     }).toList(),
                     value: rowQty.value,
@@ -179,7 +180,7 @@ class CategoryPageContent extends HookConsumerWidget {
                   children: [
                     Container(
                         width: 120,
-                        margin: EdgeInsets.only(right: 15),
+                        margin: const EdgeInsets.only(right: 15),
                         child: TextFormField(
                           controller: exclusionText,
                           onFieldSubmitted: (v) async {
@@ -204,7 +205,7 @@ class CategoryPageContent extends HookConsumerWidget {
                             exclusionText.text = '';
                           }
                         },
-                        child: Text('追加'))
+                        child: const Text('追加'))
                   ],
                 ),
                 Padding(
@@ -216,7 +217,7 @@ class CategoryPageContent extends HookConsumerWidget {
                       runSpacing: 4,
                       children: exclusions.value
                           .map((e) => Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   right: 10,
                                 ),
                                 decoration: BoxDecoration(
@@ -229,8 +230,8 @@ class CategoryPageContent extends HookConsumerWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Text(e),
                                     ),
                                     IconButton(
@@ -244,7 +245,7 @@ class CategoryPageContent extends HookConsumerWidget {
                                           await prefs.setStringList(
                                               'exclusions', copy);
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.delete_outline,
                                           size: 14,
                                         ))
@@ -287,12 +288,12 @@ class CategoryPageContent extends HookConsumerWidget {
               ],
             ),
           ),
-          Divider(),
+          const Divider(),
           SettingRow(
             label: 'サンプル画面幅',
             widget: Container(
               width: 100,
-              margin: EdgeInsets.only(bottom: 15),
+              margin: const EdgeInsets.only(bottom: 15),
               child: TextFormField(
                 controller: sampleWidthText,
                 keyboardType: TextInputType.number, //数字のキーボードを表示

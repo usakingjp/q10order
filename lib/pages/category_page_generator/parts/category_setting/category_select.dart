@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/category_item_model.dart';
-import '../models/category_model.dart';
+import '../../models/category_item_model.dart';
+import '../../models/category_model.dart';
 
 class CategorySelect extends HookConsumerWidget {
   const CategorySelect(
