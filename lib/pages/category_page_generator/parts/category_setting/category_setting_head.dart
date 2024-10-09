@@ -34,22 +34,39 @@ class CategorySettingHead extends HookConsumerWidget {
                   Map<String, dynamic> allGoods = await apis.getAllGoodsInfo();
                   debugPrint(allGoods["Items"].length.toString());
                   List<Map<String, dynamic>> itemDetails = [
-                    // for (var goods
-                    //     in allGoods["Items"] as List<GetAllGoodsInfoModel>)
-                    //   await apis.getItemDetaiInfo(itemCode: goods.itemCode)
+                    for (var goods
+                        in allGoods["Items"] as List<GetAllGoodsInfoModel>)
+                      await apis.getItemDetaiInfo(itemCode: goods.itemCode)
                   ];
-                  int count = 0;
-                  for (var goods
-                      in allGoods["Items"] as List<GetAllGoodsInfoModel>) {
-                    itemDetails.add(
-                        await apis.getItemDetaiInfo(itemCode: goods.itemCode));
-                    count += 1;
-                    if (count > 30) break;
+                  // int count = 0;
+                  // for (var goods
+                  //     in allGoods["Items"] as List<GetAllGoodsInfoModel>) {
+                  //   itemDetails.add(
+                  //       await apis.getItemDetaiInfo(itemCode: goods.itemCode));
+                  //   count += 1;
+                  //   if (count > 30) break;
+                  // }
+                  List<CategoryItemModel> categoryItemList = [];
+                  for (var item in itemDetails) {
+                    CategoryItemModel? model = ref
+                        .watch(categoryItems)
+                        .where((e) => e.itemCode == item['ItemCode'])
+                        .firstOrNull;
+                    if (model != null) {
+                      categoryItemList.add(CategoryItemModel.fromMap(
+                          update: [item, model.toMap()]));
+                    } else {
+                      categoryItemList
+                          .add(CategoryItemModel.fromMap(apiResponse: item));
+                    }
                   }
-                  ref.read(categoryItems.notifier).set([
-                    for (var item in itemDetails)
-                      CategoryItemModel.fromMap(apiResponse: item)
-                  ]);
+                  if (categoryItemList.isNotEmpty) {
+                    ref.read(categoryItems.notifier).set(categoryItemList);
+                  }
+                  // ref.read(categoryItems.notifier).set([
+                  //   for (var item in itemDetails)
+                  //     CategoryItemModel.fromMap(apiResponse: item)
+                  // ]);
                   // ref.read(categoryItems.notifier).state = [
                   //   for (var item in itemDetails)
                   //     CategoryItemModel.fromMap(apiResponse: item)

@@ -1,3 +1,5 @@
+import '../../../consts/brand_list.dart';
+
 class CategoryItemModel {
   final String itemCode;
   final String sellerCode;
@@ -37,12 +39,50 @@ class CategoryItemModel {
   }
 
   factory CategoryItemModel.fromMap(
-      {Map<String, dynamic>? apiResponse, Map<String, dynamic>? queryMap}) {
+      {Map<String, dynamic>? apiResponse,
+      Map<String, dynamic>? queryMap,
+      List<Map<String, dynamic>>? update}) {
     try {
+      if (update != null) {
+        Map<String, dynamic> apires = update[0];
+        Map<String, dynamic> ready = update[1];
+        String? brandName;
+        if (apires["BrandNo"] != null && apires["BrandNo"].isNotEmpty) {
+          var b = brandList
+              .where((brandModel) => brandModel.code == apires["BrandNo"])
+              .toList();
+          if (b.isNotEmpty) {
+            brandName = b[0].name;
+          }
+        }
+        return CategoryItemModel(
+          itemCode: ready["itemCode"] as String,
+          sellerCode: apires["SellerCode"] as String,
+          brandName: brandName,
+          itemTitle: apires["ItemTitle"] as String,
+          categoryId1: ready["categoryId1"] as int?,
+          categoryId2: ready["categoryId2"] as int?,
+          categoryId3: ready["categoryId3"] as int?,
+          categoryId4: ready["categoryId4"] as int?,
+          categoryId5: ready["categoryId5"] as int?,
+          categoryId6: ready["categoryId6"] as int?,
+        );
+      }
       if (apiResponse != null) {
+        String? brandName;
+        if (apiResponse["BrandNo"] != null &&
+            apiResponse["BrandNo"].isNotEmpty) {
+          var b = brandList
+              .where((brandModel) => brandModel.code == apiResponse["BrandNo"])
+              .toList();
+          if (b.isNotEmpty) {
+            brandName = b[0].name;
+          }
+        }
         return CategoryItemModel(
           itemCode: apiResponse["ItemCode"] as String,
           sellerCode: apiResponse["SellerCode"] as String,
+          brandName: brandName,
           itemTitle: apiResponse["ItemTitle"] as String,
         );
       }

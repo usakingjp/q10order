@@ -5,6 +5,7 @@ class WebMockTileStyle extends StatelessWidget {
       {super.key,
       required this.dispImage,
       required this.dispTitle,
+      required this.dispBrand,
       required this.dispPromotion,
       required this.dispPrice,
       required this.rowQty,
@@ -15,6 +16,7 @@ class WebMockTileStyle extends StatelessWidget {
 
   final ValueNotifier<bool> dispImage;
   final ValueNotifier<bool> dispTitle;
+  final ValueNotifier<bool> dispBrand;
   final ValueNotifier<bool> dispPromotion;
   final ValueNotifier<bool> dispPrice;
   final ValueNotifier<int> rowQty;
@@ -24,6 +26,11 @@ class WebMockTileStyle extends StatelessWidget {
   final ValueNotifier<int> sampleWidth;
   @override
   Widget build(BuildContext context) {
+    String itemTitle =
+        [for (int i = 0; i < titleLength.value; i++) 'Ｓ'].join('');
+    if (dispBrand.value) {
+      itemTitle = 'brand$itemTitle';
+    }
     return Container(
       width: sampleWidth.value / rowQty.value,
       decoration: BoxDecoration(
@@ -58,11 +65,7 @@ class WebMockTileStyle extends StatelessWidget {
                 (dispTitle.value)
                     ? Container(
                         padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          [for (int i = 0; i < titleLength.value; i++) 'Ｓ']
-                              .join(''),
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        child: Text(itemTitle),
                       )
                     : Container(),
                 (dispPromotion.value)

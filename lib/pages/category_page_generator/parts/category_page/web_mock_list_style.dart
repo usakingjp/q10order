@@ -5,6 +5,7 @@ class WebMockListStyle extends StatelessWidget {
       {super.key,
       required this.dispImage,
       required this.dispTitle,
+      required this.dispBrand,
       required this.dispPromotion,
       required this.dispPrice,
       required this.accentColor,
@@ -14,6 +15,7 @@ class WebMockListStyle extends StatelessWidget {
 
   final ValueNotifier<bool> dispImage;
   final ValueNotifier<bool> dispTitle;
+  final ValueNotifier<bool> dispBrand;
   final ValueNotifier<bool> dispPromotion;
   final ValueNotifier<bool> dispPrice;
   final ValueNotifier<Color> accentColor;
@@ -22,6 +24,11 @@ class WebMockListStyle extends StatelessWidget {
   final ValueNotifier<int> sampleWidth;
   @override
   Widget build(BuildContext context) {
+    String itemTitle =
+        [for (int i = 0; i < titleLength.value; i++) 'Ｓ'].join('');
+    if (dispBrand.value) {
+      itemTitle = 'brand$itemTitle';
+    }
     return Container(
       width: sampleWidth.value / 1,
       padding: EdgeInsets.only(bottom: 10),
@@ -54,9 +61,7 @@ class WebMockListStyle extends StatelessWidget {
                           ? Container(
                               width: sampleWidth.value -
                                   (sampleWidth.value / 6 + 40),
-                              child: Text([
-                                for (int i = 0; i < titleLength.value; i++) 'Ｓ'
-                              ].join('')),
+                              child: Text(itemTitle),
                             )
                           : Container(),
                       (dispPromotion.value)

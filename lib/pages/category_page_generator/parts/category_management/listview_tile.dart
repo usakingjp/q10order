@@ -187,6 +187,7 @@ class ListviewTile extends HookConsumerWidget {
                           GetItemDetailModel.fromMap(
                               await apis.getItemDetaiInfo(itemCode: e.itemCode))
                       ];
+                      items.sort((a, b) => b.itemQty.compareTo(a.itemQty));
 
                       String html = '';
                       if (ref.watch(pageSetting).listOrTile == 0) {
