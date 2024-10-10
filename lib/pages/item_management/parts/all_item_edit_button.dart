@@ -43,41 +43,46 @@ class AllItemEditButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allItemsEditText = ref.watch(allItemEditText);
+    bool isWork = false;
     return OutlinedButton(
-      onPressed: (ref.watch(itemManagementIsWorking))
-          ? null
-          : () {
-              if (!ref.watch(itemManagementIsWorking)) {
-                ref.read(itemManagementIsWorking.notifier).state = true;
-                var getItemsCopy = [...ref.watch(getItemDetailModels)];
-                if (allItemsEditText.isNotEmpty) {
-                  for (var item in getItemsCopy) {
-                    final beforeItemTitle = item.itemTitle;
-                    switch (type.val) {
-                      case 0:
-                        item.itemTitle = '$allItemsEditText${item.itemTitle}';
-                        break;
-                      case 1:
-                        item.itemTitle = '${item.itemTitle}$allItemsEditText';
-                        break;
-                      case 2:
-                        item.itemTitle =
-                            item.itemTitle.replaceAll(allItemsEditText, '');
-                        break;
-                      default:
-                        break;
-                    }
-                    if (beforeItemTitle != item.itemTitle) {
-                      item.edited = true;
-                    }
-                  }
-                  ref.read(getItemDetailModels.notifier).set(getItemsCopy);
-                  ref.read(getItemDetailModelsView.notifier).state =
-                      ref.watch(getItemDetailModels);
+      onPressed: () {
+        if (!isWork) {
+          isWork = true;
+          try {
+            var getItemsCopy = [...ref.watch(getItemDetailModels)];
+            if (allItemsEditText.isNotEmpty) {
+              for (var item in getItemsCopy) {
+                final beforeItemTitle = item.itemTitle;
+                switch (type.val) {
+                  case 0:
+                    item.itemTitle = '$allItemsEditText${item.itemTitle}';
+                    break;
+                  case 1:
+                    item.itemTitle = '${item.itemTitle}$allItemsEditText';
+                    break;
+                  case 2:
+                    item.itemTitle =
+                        item.itemTitle.replaceAll(allItemsEditText, '');
+                    break;
+                  default:
+                    break;
                 }
-                ref.read(itemManagementIsWorking.notifier).state = false;
+                if (beforeItemTitle != item.itemTitle) {
+                  item.edited = true;
+                }
               }
-            },
+              ref.read(getItemDetailModels.notifier).set(getItemsCopy);
+              ref.read(getItemDetailModelsView.notifier).state =
+                  ref.watch(getItemDetailModels);
+            }
+          } catch (e) {
+            debugPrint(e.toString());
+          } finally {
+            ref.read(allItemEditText.notifier).state = "";
+            isWork = false;
+          }
+        }
+      },
       child: Text(type.title),
     );
   }

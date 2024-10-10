@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:q10order/consts/colors.dart';
+
 import '../../templates/main_content_head_container.dart';
 import '../../templates/main_content_head_label.dart';
 import '../models/category_model.dart';
 import '../providers/providers.dart';
-import 'category_management/listview_label.dart';
 import 'category_management/listview_tile.dart';
 
 class CategoryManagementContent extends HookConsumerWidget {
@@ -15,6 +14,8 @@ class CategoryManagementContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newCategoryCtrl = useTextEditingController();
+    final categoryList = ref.watch(categories);
+    bool isWorking = false;
     return Column(children: [
       MainContentHeadContainer(
         child: Row(
@@ -29,35 +30,32 @@ class CategoryManagementContent extends HookConsumerWidget {
               padding: const EdgeInsets.only(right: 15),
               child: TextField(
                 controller: newCategoryCtrl,
+                autofocus: true,
                 // expands: true,
                 onSubmitted: (v) async {
-                  ref.read(isWorking.notifier).state = true;
                   await ref
                       .read(categories.notifier)
                       .add(CategoryModel(name: newCategoryCtrl.text));
                   newCategoryCtrl.text = "";
-                  ref.read(isWorking.notifier).state = false;
                 },
               ),
             ),
             FilledButton(
-              onPressed: (ref.watch(isWorking))
-                  ? () {}
-                  : () async {
-                      ref.read(isWorking.notifier).state = true;
-                      await ref
-                          .read(categories.notifier)
-                          .add(CategoryModel(name: newCategoryCtrl.text));
-                      // List<Map<String, dynamic>> result = await insertData(
-                      //     DataBaseName.categories,
-                      //     CategoryModel(name: newCategoryCtrl.text).toMap());
-                      // ref.read(categories.notifier).state = [
-                      //   for (Map<String, dynamic> map in result)
-                      //     CategoryModel.fromMap(map)
-                      // ];
-                      newCategoryCtrl.text = "";
-                      ref.read(isWorking.notifier).state = false;
-                    },
+              onPressed: () async {
+                if (!isWorking) {
+                  isWorking = true;
+                  try {
+                    await ref
+                        .read(categories.notifier)
+                        .add(CategoryModel(name: newCategoryCtrl.text));
+                    newCategoryCtrl.text = "";
+                  } catch (e) {
+                    debugPrint(e.toString());
+                  } finally {
+                    isWorking = false;
+                  }
+                }
+              },
               child: const Text('追加'),
             ),
           ],
@@ -65,11 +63,11 @@ class CategoryManagementContent extends HookConsumerWidget {
       ),
       Expanded(
         child: Container(
-          margin: EdgeInsets.only(top: 15),
+          margin: const EdgeInsets.only(top: 15),
           child: ListView.builder(
-              itemCount: ref.watch(categories).length,
+              itemCount: categoryList.length,
               itemBuilder: (c, i) {
-                var model = ref.watch(categories)[i];
+                var model = categoryList[i];
                 return ListviewTile(model: model);
               }),
         ),

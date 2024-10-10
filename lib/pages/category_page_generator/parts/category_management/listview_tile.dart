@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:q10order/pages/category_page_generator/apis/q10_apis.dart';
-import 'package:q10order/pages/item_management/models/get_item_detail_model.dart';
-import 'package:q10order/pages/setting/providers/config_provider.dart';
 
+import '../../../../common/show_loading_dialog.dart';
+import '../../../item_management/models/get_item_detail_model.dart';
+import '../../../setting/providers/config_provider.dart';
+import '../../apis/q10_apis.dart';
+import '../../models/category_item_model.dart';
 import '../../models/category_model.dart';
 import '../../providers/providers.dart';
+import '../function/get_settings.dart';
 import 'html_export.dart';
 import 'listview_label.dart';
 
@@ -22,8 +25,65 @@ class ListviewTile extends HookConsumerWidget {
     final categoryName = model.name;
     final imageUrlCtrl = useTextEditingController(text: model.headerImageUrl);
     final imageUrl = model.headerImageUrl;
+    List<CategoryItemModel> picked = ref
+        .watch(categoryItems)
+        .where((e) => [
+              e.categoryId1,
+              e.categoryId2,
+              e.categoryId3,
+              e.categoryId4,
+              e.categoryId5,
+              e.categoryId6
+            ].contains(model.id))
+        .toList();
+    Future<List<GetItemDetailModel>> itemsPickup(BuildContext context) async {
+      //ダイアログを呼び出す
+      await showLoadingDialog(context: context);
+
+      try {
+        Q10Apis apis =
+            Q10Apis(sellerAuthorizationKey: ref.watch(sellerAuthKey).value);
+        List<GetItemDetailModel> items = [
+          for (final e in picked)
+            GetItemDetailModel.fromMap(
+                await apis.getItemDetaiInfo(itemCode: e.itemCode))
+        ];
+        items.sort((a, b) => b.itemQty.compareTo(a.itemQty));
+        return items;
+      } catch (e) {
+        debugPrint(e.toString());
+        return [];
+      } finally {
+        //ダイアログを閉じる
+        Navigator.pop(context);
+      }
+    }
+
+    // Future<List<GetItemDetailModel>> itemsPickup() async {
+    //   var picked = ref
+    //       .watch(categoryItems)
+    //       .where((e) => [
+    //             e.categoryId1,
+    //             e.categoryId2,
+    //             e.categoryId3,
+    //             e.categoryId4,
+    //             e.categoryId5,
+    //             e.categoryId6
+    //           ].contains(model.id))
+    //       .toList();
+    //   Q10Apis apis =
+    //       Q10Apis(sellerAuthorizationKey: ref.watch(sellerAuthKey).value);
+    //   List<GetItemDetailModel> items = [
+    //     for (final e in picked)
+    //       GetItemDetailModel.fromMap(
+    //           await apis.getItemDetaiInfo(itemCode: e.itemCode))
+    //   ];
+    //   items.sort((a, b) => b.itemQty.compareTo(a.itemQty));
+    //   return items;
+    // }
+
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       child: IntrinsicHeight(
         child: Row(
           children: [
@@ -32,26 +92,26 @@ class ListviewTile extends HookConsumerWidget {
               height: double.infinity,
               // margin: EdgeInsets.only(right: 10),
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   border: Border(right: BorderSide(color: Colors.grey))),
               child: Text('${model.id}'),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      margin: EdgeInsets.only(bottom: 10),
+                      margin: const EdgeInsets.only(bottom: 10),
                       child: Row(
                         children: [
-                          ListviewLabel('カテゴリー名'),
+                          const ListviewLabel('カテゴリー名'),
                           (editing.value)
                               ? Container(
                                   width: 300,
                                   child: TextFormField(
                                     controller: categoryNameCtrl,
-                                    style: TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 14),
                                     onTapOutside: (v) {
                                       if (categoryName !=
                                           categoryNameCtrl.text) {
@@ -81,8 +141,8 @@ class ListviewTile extends HookConsumerWidget {
                                   ),
                                 )
                               : Text(
-                                  model.name,
-                                  style: TextStyle(
+                                  '${model.name} （${picked.length}）',
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -90,12 +150,12 @@ class ListviewTile extends HookConsumerWidget {
                       )),
                   Row(
                     children: [
-                      ListviewLabel('ヘッダ画像URL'),
+                      const ListviewLabel('ヘッダ画像URL'),
                       Container(
                         width: 320,
                         child: TextFormField(
                           controller: imageUrlCtrl,
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                           onTapOutside: (v) {
                             if (imageUrlCtrl.text != imageUrl) {
                               ref.read(categories.notifier).replace(
@@ -134,8 +194,8 @@ class ListviewTile extends HookConsumerWidget {
                           context: context,
                           builder: (c) {
                             return AlertDialog(
-                              title: Text('カテゴリーの削除'),
-                              content: Text(
+                              title: const Text('カテゴリーの削除'),
+                              content: const Text(
                                   'カテゴリーを削除すると復元できません。\n設定中の商品からもカテゴリーが削除されます。\nQoo10ページには連動しませんので、手動でカテゴリーページを削除してください。'),
                               actions: [
                                 FilledButton(
@@ -148,54 +208,38 @@ class ListviewTile extends HookConsumerWidget {
                                           .categoryDelete(model.id!);
                                       Navigator.pop(context);
                                     },
-                                    child: Text('はい')),
+                                    child: const Text('はい')),
                                 OutlinedButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('キャンセル'))
+                                    child: const Text('キャンセル'))
                               ],
                             );
                           });
                     },
-                    icon: Icon(Icons.delete_forever_outlined),
+                    icon: const Icon(Icons.highlight_off_outlined),
                   ),
                   IconButton(
                     onPressed: () {
                       editing.value = !editing.value;
                     },
-                    icon: Icon(Icons.edit_attributes_outlined),
+                    icon: const Icon(Icons.drive_file_rename_outline_outlined),
                   ),
                   IconButton(
                     onPressed: () async {
-                      var picked = ref
-                          .watch(categoryItems)
-                          .where((e) => [
-                                e.categoryId1,
-                                e.categoryId2,
-                                e.categoryId3,
-                                e.categoryId4,
-                                e.categoryId5,
-                                e.categoryId6
-                              ].contains(model.id))
-                          .toList();
-                      Q10Apis apis = Q10Apis(
-                          sellerAuthorizationKey:
-                              ref.watch(sellerAuthKey).value);
-                      List<GetItemDetailModel> items = [
-                        for (final e in picked)
-                          GetItemDetailModel.fromMap(
-                              await apis.getItemDetaiInfo(itemCode: e.itemCode))
-                      ];
-                      items.sort((a, b) => b.itemQty.compareTo(a.itemQty));
+                      List<GetItemDetailModel> items =
+                          await itemsPickup(context);
 
                       String html = '';
                       if (ref.watch(pageSetting).listOrTile == 0) {
                       } else {
-                        html = htmlTileHeaderExport(ref: ref, model: model);
+                        html = htmlTileHeaderExport(
+                            setting: ref.watch(pageSetting), model: model);
                       }
                       for (var item in items) {
-                        String itemHtml = htmlExport(ref: ref, model: item);
+                        String itemHtml = htmlExport(
+                            setting: ref.watch(pageSetting), model: item);
                         html = html + itemHtml;
                       }
                       html = html + htmlFooter;
@@ -207,7 +251,38 @@ class ListviewTile extends HookConsumerWidget {
                             );
                           });
                     },
-                    icon: Icon(Icons.share_outlined),
+                    icon: const Icon(Icons.computer_outlined),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      // AsyncValue<List<GetItemDetailModel>> items =
+                      //     await itemsPickup();
+                      List<GetItemDetailModel> items =
+                          await itemsPickup(context);
+
+                      String html = '';
+                      if (ref.watch(pageSettingM).listOrTile == 0) {
+                      } else {
+                        html = htmlTileHeaderExport(
+                            setting: await getSettings(isMob: true),
+                            model: model);
+                      }
+                      for (var item in items) {
+                        String itemHtml = htmlExport(
+                            setting: await getSettings(isMob: true),
+                            model: item);
+                        html = html + itemHtml;
+                      }
+                      html = html + htmlFooter;
+                      showDialog(
+                          context: context,
+                          builder: (c) {
+                            return AlertDialog(
+                              content: SelectableText(html),
+                            );
+                          });
+                    },
+                    icon: const Icon(Icons.smartphone_outlined),
                   ),
                 ],
               ),

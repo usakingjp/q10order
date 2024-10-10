@@ -7,6 +7,7 @@ import 'package:q10order/pages/category_page_generator/providers/providers.dart'
 import '../../../../consts/brand_list.dart';
 import '../../../item_management/models/get_item_detail_model.dart';
 import '../../models/category_model.dart';
+import '../../models/page_setting_model.dart';
 
 const String htmlHeader = '''
 <style>
@@ -24,15 +25,14 @@ const String htmlHeader = '''
 const String htmlFooter = '''</div>''';
 
 String htmlTileHeaderExport(
-    {required WidgetRef ref, required CategoryModel model}) {
-  final setting = ref.watch(pageSetting);
+    {required PageSettingModel setting, required CategoryModel model}) {
   final String accentColor =
       Color(setting.accentColor).toHexString().replaceFirst('FF', '');
   final String subColor =
       Color(setting.subColor).toHexString().replaceFirst('FF', '');
   return '''
 <style>
-    #originalArea{max-width:100%;width: 100%; display: flex; gap:1rem calc(100% / 10 / ${setting.rowQty}); flex-wrap: wrap;}
+    #originalArea{max-width:100%;width: 100%; display: flex; gap:1rem calc(100% / 10 / ${setting.rowQty}); flex-wrap: wrap;margin-bottom:5rem}
     #originalArea > img {width: 100%;}
     .oa_itemBox{display: flex;flex-direction: column;border: 1.5px solid #$subColor;border-radius:5px; width: calc((100% / ${setting.rowQty}) - (100% / 10 / ${setting.rowQty}));height:auto;box-sizing: border-box;padding: calc(100% / 10 / ${setting.rowQty} / 2);}
     .oa_itemBox a {text-decoration: none;}
@@ -48,8 +48,8 @@ ${(model.headerImageUrl.isNotEmpty) ? '<img src="${model.headerImageUrl}">' : ''
 ''';
 }
 
-String htmlExport({required WidgetRef ref, required GetItemDetailModel model}) {
-  final setting = ref.watch(pageSetting);
+String htmlExport(
+    {required PageSettingModel setting, required GetItemDetailModel model}) {
   String title = model.itemTitle;
   for (var element in setting.exclusions) {
     title = title.replaceAll(element, '');
@@ -65,7 +65,7 @@ String htmlExport({required WidgetRef ref, required GetItemDetailModel model}) {
       }
     }
     if (brandName != null) {
-      title = brandName + title;
+      title = '$brandName $title';
     }
   }
   if (title.length > int.parse(setting.titleLength)) {

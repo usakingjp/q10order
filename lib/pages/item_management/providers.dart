@@ -32,5 +32,4 @@ class GetItemDetailModels extends StateNotifier<List<GetItemDetailModel>> {
   }
 }
 
-final itemManagementIsWorking = StateProvider<bool>((ref) => false);
 final allItemEditText = StateProvider<String>((ref) => '');

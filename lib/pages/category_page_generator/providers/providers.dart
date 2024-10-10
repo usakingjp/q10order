@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/category_model.dart';
 import '../models/category_item_model.dart';
@@ -12,7 +13,8 @@ final categoryItems =
     StateNotifierProvider<CategoryItemModels, List<CategoryItemModel>>(
         (ref) => CategoryItemModels());
 // final categoryItems = StateProvider<List<CategoryItemModel>>((ref) => []);
-final isWorking = StateProvider<bool>((ref) => false);
 final pageSetting =
+    StateProvider<PageSettingModel>((ref) => PageSettingModel());
+final pageSettingM =
     StateProvider<PageSettingModel>((ref) => PageSettingModel());
 final pageindex = StateProvider<int>((ref) => 0);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'category_page/mobile_content.dart';
 import 'category_page/pc_content.dart';
 
 class CategoryPageContent extends HookConsumerWidget {
@@ -13,9 +14,8 @@ class CategoryPageContent extends HookConsumerWidget {
       length: 2,
       child: Column(
         children: [
-          Container(
-            width: double.infinity / 2,
-            color: Colors.deepPurple,
+          Ink(
+            color: Colors.amber,
             child: const TabBar(
               tabs: [
                 Tab(
@@ -27,10 +27,18 @@ class CategoryPageContent extends HookConsumerWidget {
               ],
               // controller: tabCtrl,
               labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              labelColor: Color.fromARGB(255, 111, 67, 192),
+              labelColor: Colors.white,
               unselectedLabelColor: Colors.grey,
               dividerColor: Colors.transparent,
               indicatorSize: TabBarIndicatorSize.tab,
+              indicator: BoxDecoration(
+                color: Color.fromARGB(255, 111, 67, 192),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+
               dividerHeight: 0,
             ),
           ),
@@ -40,7 +48,7 @@ class CategoryPageContent extends HookConsumerWidget {
             child: TabBarView(
               children: [
                 PcContent(),
-                PcContent(),
+                MobileContent(),
               ],
             ),
           )),

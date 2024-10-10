@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:q10order/pages/category_page_generator/models/category_model.dart';
 
 import '../../../../consts/colors.dart';
 import '../../providers/providers.dart';
@@ -11,6 +12,8 @@ class CategorySettingListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final categoryList = [...ref.watch(categories)];
+    categoryList.insert(0, CategoryModel(id: null, name: ''));
     return ListView.builder(
       itemCount: ref.watch(categoryItems).length,
       itemBuilder: (c, i) {
@@ -55,7 +58,7 @@ class CategorySettingListView extends ConsumerWidget {
                                     children: List.generate(
                                         6,
                                         (index) => CategorySelect(
-                                            categories: ref.watch(categories),
+                                            categories: categoryList,
                                             model: model,
                                             index: index))),
                               ),

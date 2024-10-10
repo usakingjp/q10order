@@ -8,6 +8,7 @@ class CategoryModels extends StateNotifier<List<CategoryModel>> {
 
   Future<void> get() async {
     List<Map<String, dynamic>> results = await getData(DataBaseName.categories);
+    // results.insert(0, {'id': null, 'name': ''});
     state = [
       for (Map<String, dynamic> map in results) CategoryModel.fromMap(map)
     ];

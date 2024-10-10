@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../consts/colors.dart';
 import '../templates/main_frame.dart';
 import 'models/page_setting_model.dart';
 import 'parts/category_management_content.dart';
 import 'parts/category_page_content.dart';
 import 'parts/category_setting_content.dart';
+import 'parts/function/get_settings.dart';
 import 'providers/providers.dart';
 
 class CategoryPageGeneratorPage extends ConsumerWidget {
@@ -21,23 +23,8 @@ class CategoryPageGeneratorPage extends ConsumerWidget {
         debugPrint("categoryItemsQuery");
         await ref.read(categoryItems.notifier).get();
         debugPrint("SharedPreferences");
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        ref.read(pageSetting.notifier).state = PageSettingModel(
-          listOrTile: prefs.getInt('listOrTile') ?? 0,
-          rowQty: prefs.getInt('rowQty') ?? 3,
-          accentColor: prefs.getInt('accentColor') ?? 4284955319,
-          subColor: prefs.getInt('subColor') ?? 4286336511,
-          titleLength: prefs.getString('titleLength') ?? '20',
-          exclusions: prefs.getStringList('exclusions') ?? [],
-          imageUrl: prefs.getString('imageUrl') ?? '',
-          imageFormat: prefs.getInt('imageFormat') ?? 0,
-          dispTitle: prefs.getBool('dispTitle') ?? true,
-          dispBrand: prefs.getBool('dispBrand') ?? true,
-          dispImage: prefs.getBool('dispImage') ?? true,
-          dispPrice: prefs.getBool('dispPrice') ?? true,
-          dispPromotion: prefs.getBool('dispPromotion') ?? true,
-          sampleWidth: prefs.getString('sampleWidth') ?? '700',
-        );
+        ref.read(pageSetting.notifier).state = await getSettings();
+        ref.read(pageSettingM.notifier).state = await getSettings(isMob: true);
         return true;
       } catch (e) {
         debugPrint(e.toString());
@@ -69,13 +56,26 @@ class CategoryPageGeneratorPage extends ConsumerWidget {
 
           Column leftnavi = Column(
             children: tabs.map((e) {
-              return TextButton(
-                onPressed: () {
-                  if (!ref.watch(isWorking)) {
-                    ref.read(pageindex.notifier).state = e['key'];
-                  }
-                },
-                child: Text(e['value']),
+              return Container(
+                // padding: EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(bottom: 15),
+                padding: EdgeInsets.only(
+                    right: (ref.watch(pageindex) != e['key']) ? 3 : 0),
+                decoration: (ref.watch(pageindex) != e['key'])
+                    ? null
+                    : BoxDecoration(
+                        border: Border(
+                            right: BorderSide(width: 3, color: mainColor))),
+                child: TextButton(
+                  onPressed: () {
+                    if (ref.watch(pageindex) != e['key']) {
+                      ref.read(pageindex.notifier).state = e['key'];
+                    }
+                  },
+                  child: Text(e['value']),
+                ),
               );
             }).toList(),
           );
